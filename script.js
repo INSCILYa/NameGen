@@ -1,4 +1,3 @@
-// Expanded word bank with more than 1000 words
 const coolWords = [
     "star", "moon", "fire", "storm", "wave", "cloud", "light", "shadow", "blaze", "thunder",
     "dragon", "phoenix", "wolf", "eagle", "tiger", "hawk", "viper", "shadow", "ice", "flame",
@@ -24,103 +23,110 @@ const coolWords = [
     "pulse", "storm", "quicksilver", "vengeance", "rune", "flame", "wildfire", "strike", "phantom", 
     "nova", "shadow", "vortex", "prism", "ember", "firestorm", "rogue", "shockwave", "ignite", "relic",
     "nightmare", "shatter", "havoc", "shadow", "pyro", "lunar", "neutron", "vortex", "velocity", "drift",
-    "chaos", "storm", "flare", "dark", "solar", "saber", "blaze", "thunderstorm", "mirage", "eclipse"
+    "chaos", "storm", "flare", "dark", "solar", "saber", "blaze", "thunderstorm", "mirage", "eclipse",
+    
+    // Added items related to Fortnite and pop culture
+    "build", "loot", "chug", "stormtrooper", "squad", "victory", " royale", "ranger", "battle", "zone",
+    "skirmish", "glider", "checkpoint", "lootbox", "storm", "pro", "boogie", "scavenger", "fortnite", "hype",
+    "brawl", "axe", "shotgun", "sniper", "assault", "launcher", "scar", "clutch", "legend", "epic", "boss",
+    "stinger", "fury", "recon", "solo", "viking", "flanker", "striker", "brutus", "builder", "crackshot",
+    "chopper", "fable", "pistol", "snipe", "hunter", "melee", "burnout", "combat", "frostbite", "saber",
+    "guardian", "wolverine", "tournament", "maverick", "splash", "phantom", "predator", "glitcher", "blade",
+    "stormshield", "ninja", "overwatch", "apex", "cyber", "stealth", "skirmisher", "vanguard", "reaper",
+    "frostbite", "lumberjack", "backbreaker", "headhunter", "shadowblade", "tornado", "recoil", "clutch",
+    "mercy", "raider", "dragonborn", "reaper", "nighthawk", "bandit", "spartan", "warlock", "ironman",
+    "thor", "spider", "ghostface", "voldemort", "joker", "batman", "daredevil", "doctorstrange", "thanos",
+    "heisenberg", "xenomorph", "harrypotter", "loki", "stormbreaker", "ragnarok", "banisher", "overdrive",
+    "starwars", "captainamerica", "hulk", "blackwidow", "ironclad", "wandavision", "subzero", "scorpion",
+    "madmax", "deadpool", "superman", "r2d2", "masterchief", "aloy", "arkham", "elitesoldier", "merlin",
+    "knight", "mage", "ranger", "shadowhunter", "drdoom", "juggernaut", "thorshammer", "overlord", "chopper",
+    
+    // Additional weapons (Real life)
+    "ak47", "shotgun", "crossbow", "katana", "bazooka", "grenade", "machete", "rifle", "pistol", "m16",
+    "sniper", "uzi", "flamethrower", "rocket", "katana", "bow", "scythe", "axe", "spike", "missile", "cannon",
+    "warrior", "revolver", "rifleman", "sabertooth", "sword", "battleaxe", "kbar", "tactical", "bayonet",
+    "shiv", "dart", "balisong", "dagger", "scout", "katana", "chopper", "bazooka", "m16", "flak", "ammunition",
+    "smg", "combatknife", "pumpshotgun", "tomahawk", "brassknuckles", "spartan", "stealthstrike", "blowdart",
+    "cleaver", "riotshield", "bayonet", "handgun", "carbine", "m249", "m14", "shotgunner", "machinegun",
+    "grenadier", "lmg", "shuriken", "boomerang", "flaregun", "zipline", "claymore", "knife", "shiv", "revolver",
+    "huntingrifle", "browning", "crowbar", "barret", "m4a1", "skorpion", "bolt", "tomahawk", "suppressor"
 ];
 
-// Mapping of letter to visually similar number replacements
-const letterToNumberMap = {
-    'a': '4',
-    'e': '3',
-    'i': '1',
-    'o': '0',
-    's': '5',
-    't': '7',
-    'b': '8',
-    'g': '9'
-};
-
-// Special characters allowed
-const specialChars = ['%', '/', '!', '#', '@', '$', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '}', '[', ']', '|', '\\'];
 
 // Function to replace letters with similar-looking numbers
-function replaceLettersWithNumbers(word) {
-    return word.split('').map(letter => {
-        return letterToNumberMap[letter.toLowerCase()] || letter;
-    }).join('');
+function replaceLettersWithNumbers(word, includeLetterLikeNumbers) {
+    if (!includeLetterLikeNumbers) return word;
+
+    const letterToNumberMap = {
+        'a': '4',
+        'e': '3',
+        'i': '1',
+        'o': '0',
+        's': '5',
+        't': '7',
+        'b': '8',
+        'g': '9'
+    };
+    return word.split('').map(letter => letterToNumberMap[letter.toLowerCase()] || letter).join('');
 }
 
-// Function to generate random username
-function generateUsername(includeNumbers, includeSpecialChars) {
-    const useTwoWords = Math.random() > 0.5;
-    let username = "";
-    
-    if (useTwoWords) {
-        const firstWord = coolWords[Math.floor(Math.random() * coolWords.length)];
-        const secondWord = coolWords[Math.floor(Math.random() * coolWords.length)];
+// Function to add numbers to the word (only regular numbers, not letter-like)
+function addNumbersToWord(word, includeRegularNumbers) {
+    if (!includeRegularNumbers) return word;
 
-        username = firstWord.charAt(0).toUpperCase() + firstWord.slice(1) + secondWord.charAt(0).toUpperCase() + secondWord.slice(1);
-    } else {
-        username = coolWords[Math.floor(Math.random() * coolWords.length)];
+    const numberCount = Math.floor(Math.random() * 2); // Generate a random number of regular digits (1 or 2)
+    let newWord = word;
+
+    for (let i = 0; i < numberCount; i++) {
+        newWord += Math.floor(Math.random() * 10); // Add random numbers (e.g., 0-9)
     }
 
-    username = replaceLettersWithNumbers(username);
+    return newWord;
+}
 
-    let letterCount = (username.match(/[a-zA-Z]/g) || []).length;
-    let numberCount = (username.match(/[0-9]/g) || []).length;
+// Function to add special characters
+const specialChars = ['%', '/', '!', '#', '@', '$', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '}', '[', ']', '|', '\\'];
+function addSpecialCharacters(word, includeSpecialChars) {
+    if (!includeSpecialChars) return word;
+    const randomIndex = Math.floor(Math.random() * specialChars.length);
+    return word + specialChars[randomIndex];
+}
 
-    // Ensure more letters than numbers
-    if (numberCount >= letterCount) {
-        while (letterCount <= numberCount) {
-            username = username.slice(0, -1); // Remove a number
-            letterCount = (username.match(/[a-zA-Z]/g) || []).length;
-            numberCount = (username.match(/[0-9]/g) || []).length;
-        }
-    }
+// Function to generate a single username
+function generateUsername(includeLetterLikeNumbers, includeRegularNumbers, includeSpecialChars) {
+    const randomWord = coolWords[Math.floor(Math.random() * coolWords.length)];
+    let username = randomWord.charAt(0).toUpperCase() + randomWord.slice(1);
 
-    if (includeNumbers) {
-        let numberPart = Math.floor(Math.random() * 100);
-        username += numberPart;
-    }
+    // Apply transformations based on options
+    username = replaceLettersWithNumbers(username, includeLetterLikeNumbers);
+    username = addNumbersToWord(username, includeRegularNumbers);
+    username = addSpecialCharacters(username, includeSpecialChars);
 
-    if (includeSpecialChars) {
-        username += specialChars[Math.floor(Math.random() * specialChars.length)];
-    }
-
-    // Generate a random username length between 4 and 16 characters
-    const randomLength = Math.floor(Math.random() * (16 - 4 + 1)) + 4;
-    let finalUsername = `XXx_${username}_xXX`;
-
-    // Ensure username fits within the random length
-    if (finalUsername.length > randomLength) {
-        finalUsername = finalUsername.slice(0, randomLength); // Cut off extra characters
-    } else if (finalUsername.length < randomLength) {
-        while (finalUsername.length < randomLength) {
-            finalUsername += Math.floor(Math.random() * 10); // Pad with random digits
-        }
-    }
-
-    return finalUsername;
+    return username;
 }
 
 // Function to generate multiple usernames
 function generateMultipleUsernames() {
     const numNames = parseInt(document.getElementById("numNames").value);
-    const includeNumbers = document.getElementById("includeNumbers").checked;
+    const includeLetterLikeNumbers = document.getElementById("includeLetterLikeNumbers").checked;
+    const includeRegularNumbers = document.getElementById("includeRegularNumbers").checked;
     const includeSpecialChars = document.getElementById("includeSpecialChars").checked;
     const resultDiv = document.getElementById("result");
+    const loadingDiv = document.getElementById("loading");
 
-    resultDiv.innerHTML = ""; // Clear previous results
-    const usernames = [];
+    // Show loading animation
+    loadingDiv.style.display = "block";
+    resultDiv.innerHTML = "";
 
-    for (let i = 0; i < numNames; i++) {
-        usernames.push(generateUsername(includeNumbers, includeSpecialChars));
-    }
-
-    usernames.forEach(username => {
-        const usernameElement = document.createElement("div");
-        usernameElement.textContent = username;
-        resultDiv.appendChild(usernameElement);
-    });
+    setTimeout(() => {
+        for (let i = 0; i < numNames; i++) {
+            const username = generateUsername(includeLetterLikeNumbers, includeRegularNumbers, includeSpecialChars);
+            const usernameDiv = document.createElement('div');
+            usernameDiv.textContent = username;
+            resultDiv.appendChild(usernameDiv);
+        }
+        loadingDiv.style.display = "none"; // Hide loading animation
+    }, 1000);
 }
 
 // Event listener for the generate button
