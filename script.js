@@ -25,7 +25,6 @@ const coolWords = [
     "nova", "shadow", "vortex", "prism", "ember", "firestorm", "rogue", "shockwave", "ignite", "relic",
     "nightmare", "shatter", "havoc", "shadow", "pyro", "lunar", "neutron", "vortex", "velocity", "drift",
     "chaos", "storm", "flare", "dark", "solar", "saber", "blaze", "thunderstorm", "mirage", "eclipse"
-    // Add many more words as needed...
 ];
 
 // Mapping of letter to visually similar number replacements
@@ -50,8 +49,8 @@ function replaceLettersWithNumbers(word) {
 // Function to generate random username
 function generateUsername() {
     const useTwoWords = Math.random() > 0.5;
-
     let username = "";
+    
     if (useTwoWords) {
         const firstWord = coolWords[Math.floor(Math.random() * coolWords.length)];
         const secondWord = coolWords[Math.floor(Math.random() * coolWords.length)];
@@ -78,11 +77,6 @@ function generateUsername() {
     // Add numbers to the username if desired
     let numberPart = Math.floor(Math.random() * 100);
     username += numberPart;
-
-    // Add special characters
-    const specialChars = "!@#$%^&*()_-+=<>?/{}[]|";
-    const randomSpecialChar = specialChars[Math.floor(Math.random() * specialChars.length)];
-    username += randomSpecialChar;
 
     // Format as "XXx_Name_xXX" style
     let finalUsername = `XXx_${username}_xXX`;
@@ -111,20 +105,40 @@ function generateMultipleUsernames() {
     document.getElementById("generate-btn").disabled = true;
     resultDiv.innerHTML = ""; // Clear previous results
 
-    // Batch the creation of usernames into small chunks
-    const fragment = document.createDocumentFragment();
+    // Efficient username generation in batches
+    let batchLimit = 5; // Generate in small batches
+    let generatedUsernames = [];
+
     for (let i = 0; i < numNames; i++) {
-        const newUsername = generateUsername();
-        const usernameElement = document.createElement("div");
-        usernameElement.textContent = newUsername;
-        fragment.appendChild(usernameElement);
+        generatedUsernames.push(generateUsername());
+        // Update the DOM after a small batch
+        if (i % batchLimit === 0) {
+            updateResultDiv(generatedUsernames);
+            generatedUsernames = [];
+        }
     }
 
-    // Append all the generated usernames in one go
-    resultDiv.appendChild(fragment);
+    // Update the DOM with the final batch
+    if (generatedUsernames.length > 0) {
+        updateResultDiv(generatedUsernames);
+    }
 
     // Re-enable the button after the batch processing
     document.getElementById("generate-btn").disabled = false;
+}
+
+// Function to update the result div
+function updateResultDiv(usernames) {
+    const resultDiv = document.getElementById("result");
+    const fragment = document.createDocumentFragment();
+
+    usernames.forEach(username => {
+        const usernameElement = document.createElement("div");
+        usernameElement.textContent = username;
+        fragment.appendChild(usernameElement);
+    });
+
+    resultDiv.appendChild(fragment);
 }
 
 // Event listener for the generate button
