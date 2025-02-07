@@ -4,28 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Username Generator</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Random Username Generator</h1>
+        <h1>Username Generator</h1>
 
-        <label for="numNames">Number of usernames:</label>
-        <input type="range" id="numNames" min="1" max="50" value="1">
-        <span id="numNamesDisplay">1</span>
-        <br>
-
-        <label for="includeNumbers">Include Numbers:</label>
-        <input type="checkbox" id="includeNumbers">
-        <br>
-
-        <label for="includeSpecialChars">Include Special Characters:</label>
-        <input type="checkbox" id="includeSpecialChars">
-        <br>
+        <!-- Options for number generation -->
+        <div class="options">
+            <label>
+                <input type="checkbox" id="includeLetterLikeNumbers"> Include Letter-Like Numbers (e.g., 'a' → '4')
+            </label>
+            <label>
+                <input type="checkbox" id="includeRegularNumbers"> Include Regular Numbers (e.g., '123')
+            </label>
+            <label>
+                <input type="checkbox" id="includeSpecialChars"> Include Special Characters (e.g., %, /)
+            </label>
+            <br>
+            <label for="numNames">Number of Names to Generate:</label>
+            <input type="range" id="numNames" min="1" max="50" value="1">
+            <span id="numNamesDisplay">1</span> names
+        </div>
 
         <button id="generate-btn">Generate Usernames</button>
 
+        <!-- Loading animation -->
+        <div id="loading" style="display: none;">Generating...</div>
+
+        <!-- Display results -->
         <div id="result"></div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Created by Inscily</p>
+        </footer>
     </div>
 
     <script src="script.js"></script>
