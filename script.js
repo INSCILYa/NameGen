@@ -39,6 +39,9 @@ const letterToNumberMap = {
     'g': '9'
 };
 
+// Special characters allowed
+const specialChars = ['%', '/', '!', '#', '@', '$', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '}', '[', ']', '|', '\\'];
+
 // Function to replace letters with similar-looking numbers
 function replaceLettersWithNumbers(word) {
     return word.split('').map(letter => {
@@ -47,7 +50,7 @@ function replaceLettersWithNumbers(word) {
 }
 
 // Function to generate random username
-function generateUsername() {
+function generateUsername(includeNumbers, includeSpecialChars) {
     const useTwoWords = Math.random() > 0.5;
     let username = "";
     
@@ -74,15 +77,18 @@ function generateUsername() {
         }
     }
 
-    // Add numbers to the username if desired
-    let numberPart = Math.floor(Math.random() * 100);
-    username += numberPart;
+    if (includeNumbers) {
+        let numberPart = Math.floor(Math.random() * 100);
+        username += numberPart;
+    }
 
-    // Format as "XXx_Name_xXX" style
-    let finalUsername = `XXx_${username}_xXX`;
+    if (includeSpecialChars) {
+        username += specialChars[Math.floor(Math.random() * specialChars.length)];
+    }
 
     // Generate a random username length between 4 and 16 characters
     const randomLength = Math.floor(Math.random() * (16 - 4 + 1)) + 4;
+    let finalUsername = `XXx_${username}_xXX`;
 
     // Ensure username fits within the random length
     if (finalUsername.length > randomLength) {
@@ -99,46 +105,22 @@ function generateUsername() {
 // Function to generate multiple usernames
 function generateMultipleUsernames() {
     const numNames = parseInt(document.getElementById("numNames").value);
+    const includeNumbers = document.getElementById("includeNumbers").checked;
+    const includeSpecialChars = document.getElementById("includeSpecialChars").checked;
     const resultDiv = document.getElementById("result");
 
-    // Temporarily disable the button to avoid overwhelming the page with requests
-    document.getElementById("generate-btn").disabled = true;
     resultDiv.innerHTML = ""; // Clear previous results
-
-    // Efficient username generation in batches
-    let batchLimit = 5; // Generate in small batches
-    let generatedUsernames = [];
+    const usernames = [];
 
     for (let i = 0; i < numNames; i++) {
-        generatedUsernames.push(generateUsername());
-        // Update the DOM after a small batch
-        if (i % batchLimit === 0) {
-            updateResultDiv(generatedUsernames);
-            generatedUsernames = [];
-        }
+        usernames.push(generateUsername(includeNumbers, includeSpecialChars));
     }
-
-    // Update the DOM with the final batch
-    if (generatedUsernames.length > 0) {
-        updateResultDiv(generatedUsernames);
-    }
-
-    // Re-enable the button after the batch processing
-    document.getElementById("generate-btn").disabled = false;
-}
-
-// Function to update the result div
-function updateResultDiv(usernames) {
-    const resultDiv = document.getElementById("result");
-    const fragment = document.createDocumentFragment();
 
     usernames.forEach(username => {
         const usernameElement = document.createElement("div");
         usernameElement.textContent = username;
-        fragment.appendChild(usernameElement);
+        resultDiv.appendChild(usernameElement);
     });
-
-    resultDiv.appendChild(fragment);
 }
 
 // Event listener for the generate button
